@@ -20,5 +20,6 @@
 * Dokumentation and Commenting Language: English
 
 
-[Minimax Theory](https://en.wikipedia.org/wiki/Minimax)
+[Minimax Theory](https://en.wikipedia.org/wiki/Minimax) 
+
 [2048 Game](https://en.wikipedia.org/wiki/2048_(video_game))
