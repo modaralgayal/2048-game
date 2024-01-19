@@ -1,0 +1,20 @@
+[tool.poetry]
+name = "2048-game"
+version = "0.1.0"
+description = ""
+authors = ["modar_algayal  <mudar.algayal@helsinki.fi>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.10"
+invoke = "^2.2.0"
+
+
+[tool.poetry.group.dev.dependencies]
+pylint = "^3.0.3"
+autopep8 = "^2.0.4"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
