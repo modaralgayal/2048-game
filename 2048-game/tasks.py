@@ -12,3 +12,12 @@ def format(ctx):
 @task
 def test(ctx):
     ctx.run("python3 -m coverage run -m unittest")
+
+@task
+def report(ctx):
+    ctx.run("python3 -m coverage report")
+
+@task
+def reporthtml(ctx):
+    ctx.run("python3 -m coverage html")
+
