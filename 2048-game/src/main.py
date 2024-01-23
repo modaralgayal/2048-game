@@ -2,8 +2,10 @@
 
 
 def main():
-    print("Hello World")
-    return
+    return "Hello World"
+
+def uncovered():
+    return True
 
 
 if __name__ == "__main__":

@@ -13,6 +13,7 @@ invoke = "^2.2.0"
 [tool.poetry.group.dev.dependencies]
 pylint = "^3.0.3"
 autopep8 = "^2.0.4"
+coverage = "^7.4.0"
 
 
 [build-system]
