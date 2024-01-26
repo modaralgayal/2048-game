@@ -109,22 +109,18 @@ class Logic:
         """
         Generate a new tile in a random empty spot
         """
-        count = 0
-        full_board = False
+        empty_spots = [(i, j) for i in range(4) for j in range(4) if board[i][j] == 0]
 
-        while any(0 in row for row in board) and count < 1:
-            row = randint(0, 3)
-            col = randint(0, 3)
-            if board[row][col] == 0:
-                count += 1
-                if randint(1, 10) == 10:
-                    board[row][col] = 4
-                else:
-                    board[row][col] = 2
-        print(count)
-
-        if count < 1:
+        if not empty_spots:
             full_board = True
-            print("Board is full")
-        print(full_board)
+        else:
+            row, col = empty_spots[randint(0, len(empty_spots) - 1)]
+
+            if randint(1, 10) == 10:
+                board[row][col] = 4
+            else:
+                board[row][col] = 2
+
+            full_board = False
+
         return board, full_board

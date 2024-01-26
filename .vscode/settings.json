@@ -1,3 +1,5 @@
 {
-  "python.analysis.extraPaths": ["./2048-game/src"]
+  "python.analysis.extraPaths": ["./2048-game/src"],
+  "python.linting.pylintArgs": ["--disable=C0103"]
+
 }
