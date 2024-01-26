@@ -1,11 +1,22 @@
+"""
+This Module is responsible for the moves made on the board, such
+as merging the tiles in the game and keeping score.
+"""
+
 from random import randint
 
 
 class Logic:
+    """This Class Handles the board Logic"""
+
     def __init__(self):
         pass
 
     def take_turn(self, direc, board, score):
+        """
+        This function handles Up, Down, Left,
+        Right moves on the board and updates the score.
+        """
         merged = [[False for _ in range(4)] for _ in range(4)]
         if direc == "UP":
             for i in range(4):
@@ -16,7 +27,6 @@ class Logic:
                             if board[q][j] == 0:
                                 shift += 1
                         if shift > 0:
-                            # Here we move the piece upwards by however many zeros (empty spaces) have been found above.
                             board[i - shift][j] = board[i][j]
                             board[i][j] = 0
                         if (
@@ -32,7 +42,6 @@ class Logic:
                             merged[i - shift - 1][j] = True
 
         elif direc == "DOWN":
-            # check this if an error occurs
             for i in range(3):
                 for j in range(4):
                     shift = 0
@@ -97,6 +106,9 @@ class Logic:
         return board, score
 
     def new_pieces(self, board):
+        """
+        Generate a new tile in a random empty spot
+        """
         count = 0
         full_board = False
 

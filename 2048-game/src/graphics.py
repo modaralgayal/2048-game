@@ -1,3 +1,6 @@
+"""
+This module is responsible for rendering all the data in the UI
+"""
 import pygame
 
 colors = {
@@ -21,18 +24,20 @@ colors = {
 
 
 class RenderGame:
+    """ This is the rendering module that gets called in the Gameloop """
     def __init__(self):
         self.font = pygame.font.Font("freesansbold.ttf", 24)
 
     def draw_board(self, screen, score, high_score):
+        """ This function simply renders the board (as a canvas) and the scores """
         pygame.draw.rect(screen, colors["bg"], [100, 200, 400, 400], 0, 10)
         score_text = self.font.render(f"Score: {score}", True, "black")
         high_score_text = self.font.render(f"High Score: {high_score}", True, "black")
         screen.blit(score_text, (110, 20))
         screen.blit(high_score_text, (110, 70))
-        pass
 
     def draw_over(self, screen):
+        """ This function is the game_over screen (doesn't work yet) """
         print("GameOVerv function")
         pygame.draw.rect(screen, "black", [50, 50, 300, 100], 0, 10)
         game_over_text1 = self.font.render("Game Over!", True, "white")
@@ -41,6 +46,7 @@ class RenderGame:
         screen.blit(game_over_text2, (70, 105))
 
     def draw_pieces(self, board, screen):
+        """ This method draws every piece when the game board is updated """
         for i in range(4):
             for j in range(4):
                 value = board[i][j]
