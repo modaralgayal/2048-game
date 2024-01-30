@@ -105,7 +105,7 @@ class Logic:
 
         return board, score
 
-    def moves_possible(self, board):
+    def moves_possible(board):
         """
         In 2048, the game is over when there are no moves possible, not
         necessarily when the board is full. This function checks if there is
@@ -148,7 +148,7 @@ class Logic:
                     board[i][j - shift] == board[i][j - shift - 1]
                 ):
                     moves_possible += 1
-
+        # moves right
         for i in range(4):
             for j in range(4):
                 shift = 0

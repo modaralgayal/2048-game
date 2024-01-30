@@ -5,7 +5,7 @@ from gameloop import GameLoop
 
 
 def main():
-    """ Main function """
+    """Main function"""
     game = GameLoop()
     game.set_up_game()
     game.play()
