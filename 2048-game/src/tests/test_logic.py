@@ -49,13 +49,10 @@ class TestLogic(unittest.TestCase):
             [[2, 4, 2, 0], [4, 0, 2, 0], [2, 2, 0, 0], [0, 0, 4, 0]]
         )
 
-        # Add assertions based on the expected behavior of the new_pieces method
         self.assertNotEqual(
             new_board, [[2, 4, 2, 0], [4, 0, 2, 0], [2, 2, 0, 0], [0, 0, 4, 0]]
-        )  # Check if a new piece is added
-        self.assertFalse(full_board)  # The board is not full after adding a new piece
-
-    # Add more test methods as needed
+        )
+        self.assertFalse(full_board)
 
 
 if __name__ == "__main__":

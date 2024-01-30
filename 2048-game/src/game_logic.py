@@ -108,7 +108,8 @@ class Logic:
     def moves_possible(self, board):
         """
         In 2048, the game is over when there are no moves possible, not
-        necessarily when the board is full
+        necessarily when the board is full. This function checks if there is
+        any moves left possible for the player.
         """
         moves_possible = 0
         # moves up
@@ -137,38 +138,37 @@ class Logic:
 
         # moves left
         for i in range(4):
-                for j in range(4):
-                    shift = 0
-                    for q in range(j):
-                        if board[i][q] == 0:
-                            shift += 1
-                            moves_possible += 1
+            for j in range(4):
+                shift = 0
+                for q in range(j):
+                    if board[i][q] == 0:
+                        shift += 1
+                        moves_possible += 1
+                if (
+                    board[i][j - shift] == board[i][j - shift - 1]
+                ):
+                    moves_possible += 1
+
+        for i in range(4):
+            for j in range(4):
+                shift = 0
+                for q in range(j):
+                    if board[i][3 - q] == 0:
+                        shift += 1
+                        moves_possible += 1
+                if 4 - j + shift <= 3:
                     if (
-                        board[i][j - shift] == board[i][j - shift - 1]
+                        board[i][4 - j + shift] == board[i][3 - j + shift]
                     ):
                         moves_possible += 1
-        
-        for i in range(4):
-                for j in range(4):
-                    shift = 0
-                    for q in range(j):
-                        if board[i][3 - q] == 0:
-                            shift += 1
-                            moves_possible += 1
-                    if 4 - j + shift <= 3:
-                        if (
-                            board[i][4 - j + shift] == board[i][3 - j + shift]
-                        ):
-                            moves_possible += 1
-        
-        return moves_possible == 0
 
+        return moves_possible == 0
 
     def new_pieces(self, board):
         """
         Generate a new tile in a random empty spot
         """
-        print("board in new_pieces")
+        # print("board in new_pieces")
 
         placable = []
         for i in range(4):
@@ -176,14 +176,12 @@ class Logic:
                 if board[i][j] == 0:
                     placable.append((i, j))
 
-
         row, col = placable[randint(0, len(placable) - 1)]
 
         if randint(1, 10) == 10:
             board[row][col] = 4
         else:
             board[row][col] = 2
-
 
         empty_spots = []
         for i in range(4):

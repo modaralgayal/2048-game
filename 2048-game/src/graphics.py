@@ -25,6 +25,7 @@ colors = {
 
 class RenderGame:
     """ This is the rendering module that gets called in the Gameloop """
+
     def __init__(self):
         self.font = pygame.font.Font("freesansbold.ttf", 24)
 
@@ -32,7 +33,8 @@ class RenderGame:
         """ This function simply renders the board (as a canvas) and the scores """
         pygame.draw.rect(screen, colors["bg"], [100, 200, 400, 400], 0, 10)
         score_text = self.font.render(f"Score: {score}", True, "black")
-        high_score_text = self.font.render(f"High Score: {high_score}", True, "black")
+        high_score_text = self.font.render(
+            f"High Score: {high_score}", True, "black")
         screen.blit(score_text, (110, 20))
         screen.blit(high_score_text, (110, 70))
 
@@ -41,7 +43,8 @@ class RenderGame:
         print("GameOVerv function")
         pygame.draw.rect(screen, "black", [50, 50, 300, 100], 0, 10)
         game_over_text1 = self.font.render("Game Over!", True, "white")
-        game_over_text2 = self.font.render("Press Enter to Restart", True, "white")
+        game_over_text2 = self.font.render(
+            "Press Enter to Restart", True, "white")
         screen.blit(game_over_text1, (130, 65))
         screen.blit(game_over_text2, (70, 105))
 
@@ -62,8 +65,10 @@ class RenderGame:
                 pygame.draw.rect(screen, color, coordinate, 0, 5)
                 if value > 0:
                     value_len = len(str(value))
-                    font = pygame.font.Font("freesansbold.ttf", 48 - (5 * value_len))
+                    font = pygame.font.Font(
+                        "freesansbold.ttf", 48 - (5 * value_len))
                     value_text = font.render(str(value), True, value_color)
-                    text_rect = value_text.get_rect(center=(j * 95 + 157, i * 95 + 257))
+                    text_rect = value_text.get_rect(
+                        center=(j * 95 + 157, i * 95 + 257))
                     screen.blit(value_text, text_rect)
                     pygame.draw.rect(screen, "black", coordinate, 2, 5)

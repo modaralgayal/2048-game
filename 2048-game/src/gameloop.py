@@ -41,7 +41,6 @@ class GameLoop:
 
         self.high_score = self.init_high
 
-
     def set_up_game(self):
         """Initialize Logic and Graphics modules"""
         self.game_logic = Logic()
@@ -84,13 +83,13 @@ class GameLoop:
                 self.game_graphics.draw_over(screen)
                 if self.high_score > self.init_high:
                     scores_file_path = os.path.join(
-                        os.path.dirname(os.path.abspath(__file__)), "scores.txt"
+                        os.path.dirname(os.path.abspath(
+                            __file__)), "scores.txt"
                     )
                     with open(scores_file_path, "w") as file:
                         file.write(f"{self.high_score}")
                     file.close()
                     self.init_high = self.high_score
-
 
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
