@@ -12,17 +12,15 @@ from heuristic import Heuristic
 
 
 class ExpectMMAI:
-    def __init__(self):
-        self.score = 0
-        self.board_values = [[0 for _ in range(4)] for _ in range(4)]
-
-    def best_move_EMM(self, board, depth=2):
+    def best_move_EMM(self, board, score, depth=2):
         best_score = -INFINITY
         best_next_move = ""
         results = []
         for direction in ["UP", "DOWN", "LEFT", "RIGHT"]:
-            testing_board = deepcopy(self.board_values)
-            testing_board, score = Logic.take_turn(direction, testing_board, self.score, self.score)
+            testing_board = deepcopy(board)
+            testing_board, new_score = Logic.take_turn(
+                direction, testing_board, score
+            )
             results.append(self.expectiminimax(testing_board, depth, direction))
 
         results = [res for res in results]
@@ -31,14 +29,14 @@ class ExpectMMAI:
             if res[0] >= best_score:
                 best_score = res[0]
                 best_next_move = res[1]
-        
-        return best_next_move
 
-    def open_spots(self):
+        return best_next_move, best_score
+
+    def open_spots(self, board):
         empty_spots = []
         for i in range(4):
             for j in range(4):
-                if self.board[i][j] == 0:
+                if board[i][j] == 0:
                     empty_spots.append((i, j))
 
         return empty_spots
@@ -58,21 +56,22 @@ class ExpectMMAI:
         return
 
     def expectiminimax(self, board, depth, direction=None):
+        print(board)
         for row in board:
-            print(board)
+            print(row)
         if not Logic.moves_possible(board):
             return -INFINITY, direction
         elif depth < 0:
-            return Heuristic.heuristicValue(self.board_values), dir
+            return Heuristic.heuristicValue(board), dir
 
         a = 0
         if depth != int(depth):
             a = -INFINITY
             for direction in ["UP", "DOWN", "LEFT", "RIGHT"]:
-                testing_board = deepcopy(self.board_values)
-                old_board = deepcopy(self.board_values)
-                self.board_values, score = Logic.take_turn(
-                    direction, testing_board, self.score
+                testing_board = deepcopy(board)
+                old_board = deepcopy(board)
+                testing_board, score = Logic.take_turn(
+                    direction, testing_board, score
                 )
 
                 if testing_board != old_board:
