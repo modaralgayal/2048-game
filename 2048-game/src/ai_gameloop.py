@@ -49,9 +49,6 @@ class AiGameLoop:
         self.game_logic = Logic()
         self.game_graphics = RenderGame()
 
-    def determine_next_move(self):
-        self.direction, self.score = self.ai_player.best_move_EMM(self.board_values)
-
     def play(self):
         """main loop"""
         run = True
@@ -60,21 +57,21 @@ class AiGameLoop:
         while run:
             timer.tick(fps)
             screen.fill("gray")
-            pygame.time.delay(100)
+            pygame.time.delay(1000)
             for row in self.board_values:
                 print(row)
             self.game_graphics.draw_board(screen, self.ai_player.score, self.high_score)
             self.game_graphics.draw_pieces(self.board_values, screen)
 
-            if self.make_moves:  # Initially false
-                self.determine_next_move()
+            if self.make_moves:
+                self.direction = self.ai_player.best_move_EMM(self.board_values)
 
             if self.direction != "":
                 old_board = deepcopy(self.board_values)
 
                 # Update self.ai_player.score instead of self.score
-                self.board_values, self.ai_player.score = self.game_logic.take_turn(
-                    self.direction, self.board_values, self.ai_player.score
+                self.board_values = self.ai_player.take_turn(
+                    self.direction, self.board_values
                 )
 
                 self.direction = ""

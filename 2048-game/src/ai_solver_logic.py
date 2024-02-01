@@ -118,8 +118,7 @@ class ExpectMMAI:
             results.append(res)
 
         results = [res for res in results]
-        print(results)
-
+ 
         for res in results:
             if res[0] >= best_score:
                 best_score = res[0]
