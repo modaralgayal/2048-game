@@ -24,5 +24,5 @@ class Heuristic:
         for i in range(4):
             for j in range(4):
                 score += board[i][j] * IDEAL_SNAKE[i][j]
-
+        #print(score)
         return score
