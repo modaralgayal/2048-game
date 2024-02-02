@@ -2,6 +2,7 @@
 Here I implement the Expectiminimax algorithm that searches for the best possible moves.
 It determines that by checking the "highest possible score of a state" given by the heuristic function.
 """
+
 INFINITY = float("inf")
 import multiprocessing as mp
 from copy import deepcopy
@@ -112,13 +113,14 @@ class ExpectMMAI:
         results = []
         for direction in ["UP", "DOWN", "LEFT", "RIGHT"]:
             testing_board = deepcopy(board)
+            old_board = deepcopy(board)
             testing_board = self.take_turn(direction, testing_board)
-            res = self.expectiminimax(testing_board, depth, direction)
-            print(res)
-            results.append(res)
+            if testing_board != old_board:
+                res = self.expectiminimax(testing_board, depth, direction)
+                results.append(res)
 
         results = [res for res in results]
- 
+
         for res in results:
             if res[0] >= best_score:
                 best_score = res[0]
@@ -128,7 +130,6 @@ class ExpectMMAI:
 
         print(best_next_move)
         print(results)
-
 
         return best_next_move, best_score
 
@@ -148,48 +149,45 @@ class ExpectMMAI:
             board[i][j] = 0
             return
 
-        if randint(1, 10) == 10:
-            board[i][j] = 4
-        else:
-            board[i][j] = 2
+        board[i][j] = 2
 
         return
 
     def expectiminimax(self, board, depth, direction):
+
         if not self.game_logic.moves_possible(board):
             print("fails right here")
             return -INFINITY, direction
-        
+
         if depth < 0:
             return self.heuristic.heuristicValue(board), direction
 
         a = 0
-        if depth != int(depth):
+        if depth % 2 != 0:
             a = -INFINITY
             for next_direction in ["UP", "DOWN", "LEFT", "RIGHT"]:
                 testing_board = deepcopy(board)
                 old_board = deepcopy(board)
 
                 testing_board = self.take_turn(next_direction, testing_board)
+                # print("working there")
 
                 if testing_board != old_board:
                     response = self.expectiminimax(
-                        testing_board, depth - 0.5, next_direction
+                        testing_board, depth - 1, next_direction
                     )[0]
                     if response > a:
                         a = response
-        elif depth == int(depth):
+        elif depth % 2 == 0:
             a = 0
             open_tiles = self.open_spots(board)
-            for location in open_tiles:
-                self.add_tile(board, location)
-                #print("working here")
-                response = (
-                    1.0
-                    / len(open_tiles)
-                    * self.expectiminimax(board, depth - 0.5, direction)[0]
-                )
-                a += response
-                self.add_tile(board, location)
+            for prob, value in [(0.9, 2), (0.1, 4)]:
+                for location in open_tiles:
+                    self.add_tile(board, location, value)
+                    # print("working here")
+                    response = (
+                        prob * self.expectiminimax(board, depth - 1, direction)[0]
+                    )
+                    a += response
+                    self.add_tile(board, location)
         return a, direction
-

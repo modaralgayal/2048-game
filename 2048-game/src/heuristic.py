@@ -20,9 +20,8 @@ class Heuristic:
         This function return the sum of the score on the snakeboard
         with each tile multiplied by its corresponding ideal shape value
         """
-        score = 0
+        heuristicValue = 0
         for i in range(4):
             for j in range(4):
-                score += board[i][j] * IDEAL_SNAKE[i][j]
-        #print(score)
-        return score
+                heuristicValue += board[i][j] * IDEAL_SNAKE[i][j]
+        return heuristicValue

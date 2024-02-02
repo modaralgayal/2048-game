@@ -9,6 +9,7 @@ import pygame
 from ai_solver_logic import ExpectMMAI
 from game_logic import Logic
 from graphics import RenderGame
+import asyncio
 
 WIDTH = 600
 HEIGHT = 600
@@ -16,7 +17,7 @@ pygame.init()
 screen = pygame.display.set_mode([WIDTH, HEIGHT])
 pygame.display.set_caption("2048 Game")
 timer = pygame.time.Clock()
-fps = 60
+fps = 120
 
 
 class AiGameLoop:
@@ -28,6 +29,7 @@ class AiGameLoop:
         self.make_moves = False
         self.game_over = False
         self.start_count = 0
+        self.score = 0
         self.direction = ""
         self.init_high = 0
         self.high_score = 0
@@ -57,21 +59,21 @@ class AiGameLoop:
         while run:
             timer.tick(fps)
             screen.fill("gray")
-            pygame.time.delay(1000)
+
             for row in self.board_values:
                 print(row)
-            self.game_graphics.draw_board(screen, self.ai_player.score, self.high_score)
+            self.game_graphics.draw_board(screen, self.score, self.high_score)
             self.game_graphics.draw_pieces(self.board_values, screen)
 
             if self.make_moves:
-                self.direction = self.ai_player.best_move_EMM(self.board_values)
+                self.direction = self.ai_player.best_move_EMM(self.board_values)[0]
 
             if self.direction != "":
                 old_board = deepcopy(self.board_values)
 
                 # Update self.ai_player.score instead of self.score
-                self.board_values = self.ai_player.take_turn(
-                    self.direction, self.board_values
+                self.board_values, self.score = self.game_logic.take_turn(
+                    self.direction, self.board_values, self.score
                 )
 
                 self.direction = ""
@@ -82,6 +84,7 @@ class AiGameLoop:
 
             if self.spawn_new or self.start_count < 2:
                 print("initializing")
+                print(self.board_values)
                 self.board_values, self.game_over = self.game_logic.new_pieces(
                     self.board_values
                 )
@@ -101,7 +104,7 @@ class AiGameLoop:
                     run = False
 
                     if self.game_over:
-                        if event.key == pygame.K_RETURN:
+                        if event.type == pygame.K_RETURN:
                             self.board_values = [
                                 [0 for _ in range(4)] for _ in range(4)
                             ]
@@ -112,8 +115,8 @@ class AiGameLoop:
                             self.direction = ""
                             self.game_over = False
 
-            if self.ai_player.score > self.high_score:
-                self.high_score = self.ai_player.score
+            if self.score > self.high_score:
+                self.high_score = self.score
 
             pygame.display.flip()
 
