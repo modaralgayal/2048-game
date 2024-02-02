@@ -114,6 +114,8 @@ class ExpectMMAI:
         open_tiles = self.open_spots(board)
         if len(open_tiles) <= 4:
             depth = 5
+        elif len(open_tiles) <= 8:
+            depth = 4
         print("Depth is:", depth)
         for direction in ["UP", "DOWN", "LEFT", "RIGHT"]:
             testing_board = deepcopy(board)
