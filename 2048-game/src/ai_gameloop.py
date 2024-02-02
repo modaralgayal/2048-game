@@ -60,8 +60,8 @@ class AiGameLoop:
             timer.tick(fps)
             screen.fill("gray")
 
-            for row in self.board_values:
-                print(row)
+            #for row in self.board_values:
+            #    print(row)
             self.game_graphics.draw_board(screen, self.score, self.high_score)
             self.game_graphics.draw_pieces(self.board_values, screen)
 
@@ -88,14 +88,14 @@ class AiGameLoop:
                 self.board_values, self.game_over = self.game_logic.new_pieces(
                     self.board_values
                 )
-                for row in self.board_values:
-                    print(row)
+                #for row in self.board_values:
+                #    print(row)
 
-                print("Checking in main loop:", self.game_over)
+                #print("Checking in main loop:", self.game_over)
                 self.spawn_new = False
                 self.start_count += 1
 
-                print(self.start_count)
+                #print(self.start_count)
                 if self.start_count >= 2:
                     self.make_moves = True
 

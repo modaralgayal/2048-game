@@ -107,10 +107,14 @@ class ExpectMMAI:
 
         return board
 
-    def best_move_EMM(self, board, depth=2):
+    def best_move_EMM(self, board, depth=3):
         best_score = -INFINITY
         best_next_move = ""
         results = []
+        open_tiles = self.open_spots(board)
+        if len(open_tiles) <= 4:
+            depth = 5
+        print("Depth is:", depth)
         for direction in ["UP", "DOWN", "LEFT", "RIGHT"]:
             testing_board = deepcopy(board)
             old_board = deepcopy(board)
@@ -128,8 +132,8 @@ class ExpectMMAI:
 
         self.score = best_score
 
-        print(best_next_move)
-        print(results)
+        #print(best_next_move)
+        #print(results)
 
         return best_next_move, best_score
 
@@ -182,6 +186,7 @@ class ExpectMMAI:
             a = 0
             open_tiles = self.open_spots(board)
             for prob, value in [(0.9, 2), (0.1, 4)]:
+
                 for location in open_tiles:
                     self.add_tile(board, location, value)
                     # print("working here")
