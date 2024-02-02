@@ -40,8 +40,6 @@ class ExpectMMAI:
                             and not merged[i - shift][j]
                             and not merged[i - shift - 1][j]
                         ):
-                            # If the piece above has the same value as the moved piece, they
-                            # merge and the piece gets double its value
                             board[i - shift - 1][j] *= 2
                             board[i - shift][j] = 0
                             merged[i - shift - 1][j] = True
@@ -112,7 +110,7 @@ class ExpectMMAI:
         best_next_move = ""
         results = []
         open_tiles = self.open_spots(board)
-        if len(open_tiles) <= 4:
+        if len(open_tiles) < 4:
             depth = 5
         elif len(open_tiles) <= 8:
             depth = 4
@@ -159,7 +157,7 @@ class ExpectMMAI:
 
         return
 
-    def expectiminimax(self, board, depth, direction):
+    def expectiminimax(self, board, depth, direction, max_empty_tiles=4):
 
         if not self.game_logic.moves_possible(board):
             print("fails right here")
@@ -176,25 +174,25 @@ class ExpectMMAI:
                 old_board = deepcopy(board)
 
                 testing_board = self.take_turn(next_direction, testing_board)
-                # print("working there")
 
                 if testing_board != old_board:
                     response = self.expectiminimax(
-                        testing_board, depth - 1, next_direction
+                        testing_board, depth - 1, next_direction, max_empty_tiles
                     )[0]
                     if response > a:
                         a = response
         elif depth % 2 == 0:
             a = 0
             open_tiles = self.open_spots(board)
-            for prob, value in [(0.9, 2), (0.1, 4)]:
 
+            open_tiles = sorted(open_tiles, key=lambda loc: self.heuristic.tile_weight(loc), reverse=True)
+            open_tiles = open_tiles[:max_empty_tiles]
+
+            for prob, value in [(0.9, 2), (0.1, 4)]:
                 for location in open_tiles:
                     self.add_tile(board, location, value)
-                    # print("working here")
-                    response = (
-                        prob * self.expectiminimax(board, depth - 1, direction)[0]
-                    )
+                    response = prob * self.expectiminimax(board, depth - 1, direction, max_empty_tiles)[0]
                     a += response
                     self.add_tile(board, location)
+
         return a, direction

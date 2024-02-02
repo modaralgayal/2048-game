@@ -11,13 +11,12 @@ IDEAL_SNAKE = [
     [2**3, 2**2, 2**1, 2**0],
 ]
 
-
 class Heuristic:
     """This class has the current heuristic score of a board"""
 
     def heuristicValue(self, board):
         """
-        This function return the sum of the score on the snakeboard
+        This function returns the sum of the score on the snakeboard
         with each tile multiplied by its corresponding ideal shape value
         """
         heuristicValue = 0
@@ -25,3 +24,11 @@ class Heuristic:
             for j in range(4):
                 heuristicValue += board[i][j] * IDEAL_SNAKE[i][j]
         return heuristicValue
+
+    def tile_weight(self, location):
+        """
+        This function returns the weight of a tile based on its location.
+        It uses the IDEAL_SNAKE to determine the weight.
+        """
+        i, j = location
+        return IDEAL_SNAKE[i][j]
