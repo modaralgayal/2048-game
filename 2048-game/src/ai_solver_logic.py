@@ -24,6 +24,7 @@ class ExpectMMAI:
         Right moves on the board and updates the score.
         """
         merged = [[False for _ in range(4)] for _ in range(4)]
+        hadMovement = False
         if direc == "UP":
             for i in range(4):
                 for j in range(4):
@@ -32,9 +33,11 @@ class ExpectMMAI:
                         for q in range(i):
                             if board[q][j] == 0:
                                 shift += 1
+
                         if shift > 0:
                             board[i - shift][j] = board[i][j]
                             board[i][j] = 0
+
                         if (
                             board[i - shift - 1][j] == board[i - shift][j]
                             and not merged[i - shift][j]
@@ -45,6 +48,7 @@ class ExpectMMAI:
                             board[i - shift - 1][j] *= 2
                             board[i - shift][j] = 0
                             merged[i - shift - 1][j] = True
+                            hadMovement = True
 
         elif direc == "DOWN":
             for i in range(3):
@@ -53,9 +57,11 @@ class ExpectMMAI:
                     for q in range(i + 1):
                         if board[3 - q][j] == 0:
                             shift += 1
+
                     if shift > 0:
                         board[2 - i + shift][j] = board[2 - i][j]
                         board[2 - i][j] = 0
+
                     if 3 - i + shift <= 3:
                         if (
                             board[2 - i + shift][j] == board[3 - i + shift][j]
@@ -65,6 +71,7 @@ class ExpectMMAI:
                             board[3 - i + shift][j] *= 2
                             board[2 - i + shift][j] = 0
                             merged[3 - i + shift][j] = True
+                            hadMovement = True
 
         elif direc == "LEFT":
             for i in range(4):
@@ -84,6 +91,7 @@ class ExpectMMAI:
                         board[i][j - shift - 1] *= 2
                         board[i][j - shift] = 0
                         merged[i][j - shift - 1] = True
+                        hadMovement = True
 
         elif direc == "RIGHT":
             for i in range(4):
@@ -95,6 +103,7 @@ class ExpectMMAI:
                     if shift > 0:
                         board[i][3 - j + shift] = board[i][3 - j]
                         board[i][3 - j] = 0
+
                     if 4 - j + shift <= 3:
                         if (
                             board[i][4 - j + shift] == board[i][3 - j + shift]
@@ -104,22 +113,24 @@ class ExpectMMAI:
                             board[i][4 - j + shift] *= 2
                             board[i][3 - j + shift] = 0
                             merged[i][4 - j + shift] = True
+                            hadMovement = True
+        return board, hadMovement
 
-        return board
-
-    def best_move_EMM(self, board, depth=2):
+    def best_move_EMM(self, board, depth=3):
         best_score = -INFINITY
         best_next_move = ""
         results = []
+
         for direction in ["UP", "DOWN", "LEFT", "RIGHT"]:
             testing_board = deepcopy(board)
-            old_board = deepcopy(board)
-            testing_board = self.take_turn(direction, testing_board)
-            if testing_board != old_board:
+            testing_board, hadMovement = self.take_turn(direction, testing_board)
+
+            if hadMovement:
                 res = self.expectiminimax(testing_board, depth, direction)
                 results.append(res)
 
         results = [res for res in results]
+        print(results)
 
         for res in results:
             if res[0] >= best_score:
@@ -127,10 +138,6 @@ class ExpectMMAI:
                 best_next_move = res[1]
 
         self.score = best_score
-
-        print(best_next_move)
-        print(results)
-
         return best_next_move, best_score
 
     def open_spots(self, board):
@@ -163,16 +170,17 @@ class ExpectMMAI:
             return self.heuristic.heuristicValue(board), direction
 
         a = 0
+
         if depth % 2 != 0:
             a = -INFINITY
+
             for next_direction in ["UP", "DOWN", "LEFT", "RIGHT"]:
                 testing_board = deepcopy(board)
-                old_board = deepcopy(board)
+                testing_board, hadMovement = self.take_turn(
+                    next_direction, testing_board
+                )
 
-                testing_board = self.take_turn(next_direction, testing_board)
-                # print("working there")
-
-                if testing_board != old_board:
+                if hadMovement:
                     response = self.expectiminimax(
                         testing_board, depth - 1, next_direction
                     )[0]

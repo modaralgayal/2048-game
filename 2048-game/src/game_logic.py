@@ -17,6 +17,7 @@ class Logic:
         This function handles Up, Down, Left,
         Right moves on the board and updates the score.
         """
+        hadMovement = False
         merged = [[False for _ in range(4)] for _ in range(4)]
         if direc == "UP":
             for i in range(4):
@@ -40,6 +41,7 @@ class Logic:
                             score += board[i - shift - 1][j]
                             board[i - shift][j] = 0
                             merged[i - shift - 1][j] = True
+                            hadMovement = True
 
         elif direc == "DOWN":
             for i in range(3):
@@ -61,6 +63,7 @@ class Logic:
                             score += board[3 - i + shift][j]
                             board[2 - i + shift][j] = 0
                             merged[3 - i + shift][j] = True
+                            hadMovement = True
 
         elif direc == "LEFT":
             for i in range(4):
@@ -81,6 +84,7 @@ class Logic:
                         score += board[i][j - shift - 1]
                         board[i][j - shift] = 0
                         merged[i][j - shift - 1] = True
+                        hadMovement = True
 
         elif direc == "RIGHT":
             for i in range(4):
@@ -102,8 +106,9 @@ class Logic:
                             score += board[i][4 - j + shift]
                             board[i][3 - j + shift] = 0
                             merged[i][4 - j + shift] = True
+                            hadMovement = True
 
-        return board, score
+        return board, score, hadMovement
 
     def moves_possible(self, board):
         """

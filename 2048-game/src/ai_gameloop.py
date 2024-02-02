@@ -54,14 +54,11 @@ class AiGameLoop:
     def play(self):
         """main loop"""
         run = True
-        old_board = None
 
         while run:
             timer.tick(fps)
             screen.fill("gray")
 
-            for row in self.board_values:
-                print(row)
             self.game_graphics.draw_board(screen, self.score, self.high_score)
             self.game_graphics.draw_pieces(self.board_values, screen)
 
@@ -69,10 +66,8 @@ class AiGameLoop:
                 self.direction = self.ai_player.best_move_EMM(self.board_values)[0]
 
             if self.direction != "":
-                old_board = deepcopy(self.board_values)
-
                 # Update self.ai_player.score instead of self.score
-                self.board_values, self.score = self.game_logic.take_turn(
+                self.board_values, self.score, hadMovement = self.game_logic.take_turn(
                     self.direction, self.board_values, self.score
                 )
 
@@ -80,7 +75,7 @@ class AiGameLoop:
                 if self.start_count < 2:
                     self.spawn_new = True
                 else:
-                    self.spawn_new = self.board_values != old_board
+                    self.spawn_new = hadMovement
 
             if self.spawn_new or self.start_count < 2:
                 print("initializing")
@@ -88,9 +83,6 @@ class AiGameLoop:
                 self.board_values, self.game_over = self.game_logic.new_pieces(
                     self.board_values
                 )
-                for row in self.board_values:
-                    print(row)
-
                 print("Checking in main loop:", self.game_over)
                 self.spawn_new = False
                 self.start_count += 1
@@ -103,7 +95,7 @@ class AiGameLoop:
                 if event.type == pygame.QUIT:
                     run = False
 
-                    if self.game_over:
+                    if not self.game_over:
                         if event.type == pygame.K_RETURN:
                             self.board_values = [
                                 [0 for _ in range(4)] for _ in range(4)
