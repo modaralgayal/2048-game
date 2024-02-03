@@ -1,6 +1,8 @@
 """
 This is the main Gameloop where the game runs
 """
+
+import asyncio
 import os
 import random
 from copy import deepcopy
@@ -9,7 +11,6 @@ import pygame
 from ai_solver_logic import ExpectMMAI
 from game_logic import Logic
 from graphics import RenderGame
-import asyncio
 
 WIDTH = 600
 HEIGHT = 600
@@ -24,7 +25,12 @@ class AiGameLoop:
     """The game is initialized and run here"""
 
     def __init__(self):
-        self.board_values = [[0 for _ in range(4)] for _ in range(4)]
+        self.board_values = [
+            [4096, 128, 512, 2],
+            [4, 256, 512, 0],
+            [64, 1024, 2, 0],
+            [32, 0, 128, 0],
+        ]
         self.spawn_new = True
         self.make_moves = False
         self.game_over = False
@@ -60,7 +66,7 @@ class AiGameLoop:
             timer.tick(fps)
             screen.fill("gray")
 
-            #for row in self.board_values:
+            # for row in self.board_values:
             #    print(row)
             self.game_graphics.draw_board(screen, self.score, self.high_score)
             self.game_graphics.draw_pieces(self.board_values, screen)
@@ -88,14 +94,14 @@ class AiGameLoop:
                 self.board_values, self.game_over = self.game_logic.new_pieces(
                     self.board_values
                 )
-                #for row in self.board_values:
+                # for row in self.board_values:
                 #    print(row)
 
-                #print("Checking in main loop:", self.game_over)
+                # print("Checking in main loop:", self.game_over)
                 self.spawn_new = False
                 self.start_count += 1
 
-                #print(self.start_count)
+                # print(self.start_count)
                 if self.start_count >= 2:
                     self.make_moves = True
 

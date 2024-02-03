@@ -13,6 +13,8 @@ from heuristic import Heuristic
 
 
 class ExpectMMAI:
+    "The Ai that solves the game"
+
     def __init__(self) -> None:
         self.game_logic = Logic()
         self.heuristic = Heuristic()
@@ -105,15 +107,19 @@ class ExpectMMAI:
 
         return board
 
-    def best_move_EMM(self, board, depth=3):
+    def best_move_EMM(self, board, depth=4):
+        """
+        This function calls the expectiminimax algorithm and gathers possible moves,
+        then chooses the best move based based on the heuristis score.
+        """
         best_score = -INFINITY
         best_next_move = ""
         results = []
         open_tiles = self.open_spots(board)
         if len(open_tiles) < 4:
+            depth = 6
+        elif len(open_tiles) < 6:
             depth = 5
-        elif len(open_tiles) <= 8:
-            depth = 4
         print("Depth is:", depth)
         for direction in ["UP", "DOWN", "LEFT", "RIGHT"]:
             testing_board = deepcopy(board)
@@ -132,12 +138,15 @@ class ExpectMMAI:
 
         self.score = best_score
 
-        #print(best_next_move)
-        #print(results)
+        # print(best_next_move)
+        # print(results)
 
         return best_next_move, best_score
 
     def open_spots(self, board):
+        """
+        Checks all the open tiles in the board.
+        """
         empty_spots = []
         for i in range(4):
             for j in range(4):
@@ -147,6 +156,9 @@ class ExpectMMAI:
         return empty_spots
 
     def add_tile(self, board, location, value=None):
+        """
+        Adds tile in given spot. This function is used for testing.
+        """
         i, j = location
 
         if value:
@@ -157,8 +169,11 @@ class ExpectMMAI:
 
         return
 
-    def expectiminimax(self, board, depth, direction, max_empty_tiles=4):
-
+    def expectiminimax(self, board, depth, direction, max_empty_tiles=8):
+        """
+        Expectiminimax function that also uses pruning,
+        it checks at max the top 8 most valuable tiles.
+        """
         if not self.game_logic.moves_possible(board):
             print("fails right here")
             return -INFINITY, direction
@@ -185,13 +200,22 @@ class ExpectMMAI:
             a = 0
             open_tiles = self.open_spots(board)
 
-            open_tiles = sorted(open_tiles, key=lambda loc: self.heuristic.tile_weight(loc), reverse=True)
+            open_tiles = sorted(
+                open_tiles,
+                key=lambda loc: self.heuristic.tile_weight(loc),
+                reverse=True,
+            )
             open_tiles = open_tiles[:max_empty_tiles]
 
             for prob, value in [(0.9, 2), (0.1, 4)]:
                 for location in open_tiles:
                     self.add_tile(board, location, value)
-                    response = prob * self.expectiminimax(board, depth - 1, direction, max_empty_tiles)[0]
+                    response = (
+                        prob
+                        * self.expectiminimax(
+                            board, depth - 1, direction, max_empty_tiles
+                        )[0]
+                    )
                     a += response
                     self.add_tile(board, location)
 
