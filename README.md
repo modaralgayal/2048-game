@@ -1,6 +1,7 @@
 # 2048-game
 
 [Definition Document](./Definition.md)
+[Testing Document](./testingDocument.md)
 
 ### Weekly Reports
 
