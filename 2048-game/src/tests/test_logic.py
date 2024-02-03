@@ -11,7 +11,7 @@ class TestLogic(unittest.TestCase):
         board = [[2, 0, 0, 2], [4, 0, 0, 2], [2, 2, 2, 2], [0, 0, 4, 4]]
         score = 0
 
-        new_board, new_score = self.logic.take_turn("UP", board, score)
+        new_board, new_score, hadMovement = self.logic.take_turn("UP", board, score)
 
         self.assertEqual(new_board[0][3], 4)
         self.assertTrue(new_score >= 4)
@@ -20,7 +20,7 @@ class TestLogic(unittest.TestCase):
         board = [[2, 0, 0, 2], [4, 0, 0, 2], [2, 2, 2, 2], [0, 0, 4, 4]]
         score = 0
 
-        new_board, new_score = self.logic.take_turn("DOWN", board, score)
+        new_board, new_score, hadMovement = self.logic.take_turn("DOWN", board, score)
 
         self.assertEqual(new_board[2][3], 4)
         self.assertTrue(new_score >= 4)
@@ -29,7 +29,7 @@ class TestLogic(unittest.TestCase):
         board = [[2, 0, 0, 2], [4, 0, 0, 2], [2, 2, 2, 2], [0, 0, 4, 4]]
         score = 0
 
-        new_board, new_score = self.logic.take_turn("LEFT", board, score)
+        new_board, new_score, hadMovement = self.logic.take_turn("LEFT", board, score)
 
         self.assertEqual(new_board[2][0], 4)
         self.assertEqual(new_board[2][1], 4)
@@ -39,20 +39,20 @@ class TestLogic(unittest.TestCase):
         board = [[2, 0, 0, 2], [4, 0, 0, 2], [2, 2, 2, 2], [0, 0, 4, 4]]
         score = 0
 
-        new_board, new_score = self.logic.take_turn("RIGHT", board, score)
+        new_board, new_score, hadMovement = self.logic.take_turn("RIGHT", board, score)
 
         self.assertEqual(new_board[0][3], 4)
         self.assertTrue(new_score >= 4)
 
     def test_new_pieces(self):
-        new_board, full_board = self.logic.new_pieces(
+        new_board, moves_possible = self.logic.new_pieces(
             [[2, 4, 2, 0], [4, 0, 2, 0], [2, 2, 0, 0], [0, 0, 4, 0]]
         )
 
-        self.assertNotEqual(
-            new_board, [[2, 4, 2, 0], [4, 0, 2, 0], [2, 2, 0, 0], [0, 0, 4, 0]]
+        assert(
+            new_board != [[2, 4, 2, 0], [4, 0, 2, 0], [2, 2, 0, 0], [0, 0, 4, 0]]
         )
-        self.assertFalse(full_board)
+        self.assertTrue(moves_possible)
 
 
 if __name__ == "__main__":

@@ -125,7 +125,6 @@ class Logic:
                     for q in range(i):
                         if board[q][j] == 0:
                             shift += 1
-                            moves_possible += 1
                     if board[i - shift - 1][j] == board[i - shift][j]:
                         moves_possible += 1
 
@@ -136,7 +135,6 @@ class Logic:
                 for q in range(i + 1):
                     if board[3 - q][j] == 0:
                         shift += 1
-                        moves_possible += 1
                 if 3 - i + shift <= 3:
                     if board[2 - i + shift][j] == board[3 - i + shift][j]:
                         moves_possible += 1
@@ -148,7 +146,6 @@ class Logic:
                 for q in range(j):
                     if board[i][q] == 0:
                         shift += 1
-                        moves_possible += 1
                 if board[i][j - shift] == board[i][j - shift - 1]:
                     moves_possible += 1
         # moves right
@@ -158,7 +155,6 @@ class Logic:
                 for q in range(j):
                     if board[i][3 - q] == 0:
                         shift += 1
-                        moves_possible += 1
                 if 4 - j + shift <= 3:
                     if board[i][4 - j + shift] == board[i][3 - j + shift]:
                         moves_possible += 1
