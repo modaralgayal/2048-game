@@ -17,3 +17,4 @@
 * navigate to `./2048-game`
 * If you want to play the game by yourself run `poetry run invoke start`
 * If you want the AI to solve it for you `poetry run invoke startAi`
+* To run tests navigate to `./2048-game/src` and run `poetry run invoke test`
