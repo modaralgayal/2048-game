@@ -10,6 +10,8 @@
 
 [Week 2](./weeklyReports/week_2_report.md)
 
+[Week 3](./weeklyReports/week_3_report.md)
+
 
 ### Usage Instructions
 
