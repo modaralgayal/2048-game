@@ -30,6 +30,8 @@ class Logic:
                         if shift > 0:
                             board[i - shift][j] = board[i][j]
                             board[i][j] = 0
+                            hadMovement = True
+
                         if (
                             board[i - shift - 1][j] == board[i - shift][j]
                             and not merged[i - shift][j]
@@ -53,6 +55,8 @@ class Logic:
                     if shift > 0:
                         board[2 - i + shift][j] = board[2 - i][j]
                         board[2 - i][j] = 0
+                        hadMovement = True
+
                     if 3 - i + shift <= 3:
                         if (
                             board[2 - i + shift][j] == board[3 - i + shift][j]
@@ -75,6 +79,8 @@ class Logic:
                     if shift > 0:
                         board[i][j - shift] = board[i][j]
                         board[i][j] = 0
+                        hadMovement = True
+
                     if (
                         board[i][j - shift] == board[i][j - shift - 1]
                         and not merged[i][j - shift - 1]
@@ -96,6 +102,8 @@ class Logic:
                     if shift > 0:
                         board[i][3 - j + shift] = board[i][3 - j]
                         board[i][3 - j] = 0
+                        hadMovement = True
+
                     if 4 - j + shift <= 3:
                         if (
                             board[i][4 - j + shift] == board[i][3 - j + shift]

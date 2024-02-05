@@ -26,10 +26,10 @@ class AiGameLoop:
 
     def __init__(self):
         self.board_values = [
-            [4096, 128, 512, 2],
-            [4, 256, 512, 0],
-            [64, 1024, 2, 0],
-            [32, 0, 128, 0],
+            [0, 0, 8, 16],
+            [256, 16, 128, 64],
+            [2, 32, 1024, 2048],
+            [0, 4, 0, 2],
         ]
         self.spawn_new = True
         self.make_moves = False

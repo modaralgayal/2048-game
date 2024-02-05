@@ -99,7 +99,7 @@ class ExpectMMAI:
                         if (
                             board[i][4 - j + shift] == board[i][3 - j + shift]
                             and not merged[i][4 - j + shift]
-                            and not merged[i][3 - j + shift]
+                            and not merged[i][3 - j + shift]   
                         ):
                             board[i][4 - j + shift] *= 2
                             board[i][3 - j + shift] = 0
@@ -118,8 +118,8 @@ class ExpectMMAI:
         open_tiles = self.open_spots(board)
         if len(open_tiles) < 4:
             depth = 6
-        elif len(open_tiles) < 6:
-            depth = 5
+        #elif len(open_tiles) < 6:
+        #    depth = 4
         print("Depth is:", depth)
         for direction in ["UP", "DOWN", "LEFT", "RIGHT"]:
             testing_board = deepcopy(board)
@@ -169,13 +169,13 @@ class ExpectMMAI:
 
         return
 
-    def expectiminimax(self, board, depth, direction, max_empty_tiles=8):
+    def expectiminimax(self, board, depth, direction, max_empty_tiles=6):
         """
         Expectiminimax function that also uses pruning,
         it checks at max the top 8 most valuable tiles.
         """
         if not self.game_logic.moves_possible(board):
-            print("fails right here")
+            #print("fails right here")
             return -INFINITY, direction
 
         if depth < 0:
