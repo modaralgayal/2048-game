@@ -134,8 +134,8 @@ class ExpectMMAI:
         best_next_move = ""
         results = []
         open_tiles = self.open_spots(board)
-        # if len(open_tiles) <= 12:
-        #    depth = 6
+        if len(open_tiles) <= 4:
+            depth = 6
         # elif len(open_tiles) <= 10:
         #    depth = 8
         # elif len(open_tiles) <= 6:

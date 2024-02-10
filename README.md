@@ -21,3 +21,9 @@
 - If you want to play the game by yourself run `poetry run invoke start`
 - If you want the AI to solve it for you `poetry run invoke startAi`
 - To run tests navigate to `./2048-game/src` and run `poetry run invoke test`
+- When the game is over, Press enter to restart it.
+
+
+### Short Description
+
+- Although the algorithm might sometimes fail in the early stages of the game, if you run it more that 1 times it will prove that it is capable of making it very far in the game. The Expectiminimax algorithm takes into account that there is a random element to the game and tries its best to mitigate the outcome.
