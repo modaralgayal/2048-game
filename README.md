@@ -1,4 +1,4 @@
-# 2048-game
+# 2048-game [AI solver included]
 
 [Definition Document](./Definition.md)
 
