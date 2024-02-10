@@ -21,91 +21,109 @@ class ExpectMMAI:
         self.score = 0
 
     def take_turn(self, direc, board):
-        """
-        This function handles Up, Down, Left,
-        Right moves on the board and updates the score.
-        """
-        merged = [[False for _ in range(4)] for _ in range(4)]
+        """Makes move on the board"""
+        array_temp = [[0 for x in range(0, 4)] for x in range(0, 4)]
+        for x in range(0, 16):
+            array_temp[x % 4][x // 4] = board[x % 4][x // 4]
+
         if direc == "UP":
-            for i in range(4):
-                for j in range(4):
-                    shift = 0
-                    if i > 0:
-                        for q in range(i):
-                            if board[q][j] == 0:
-                                shift += 1
-                        if shift > 0:
-                            board[i - shift][j] = board[i][j]
-                            board[i][j] = 0
-                        if (
-                            board[i - shift - 1][j] == board[i - shift][j]
-                            and not merged[i - shift][j]
-                            and not merged[i - shift - 1][j]
-                        ):
-                            board[i - shift - 1][j] *= 2
-                            board[i - shift][j] = 0
-                            merged[i - shift - 1][j] = True
+            for y_ind in range(0, 4):
 
-        elif direc == "DOWN":
-            for i in range(3):
-                for j in range(4):
-                    shift = 0
-                    for q in range(i + 1):
-                        if board[3 - q][j] == 0:
-                            shift += 1
-                    if shift > 0:
-                        board[2 - i + shift][j] = board[2 - i][j]
-                        board[2 - i][j] = 0
-                    if 3 - i + shift <= 3:
-                        if (
-                            board[2 - i + shift][j] == board[3 - i + shift][j]
-                            and not merged[3 - i + shift][j]
-                            and not merged[2 - i + shift][j]
-                        ):
-                            board[3 - i + shift][j] *= 2
-                            board[2 - i + shift][j] = 0
-                            merged[3 - i + shift][j] = True
+                for x_ind in range(0, 4):
 
-        elif direc == "LEFT":
-            for i in range(4):
-                for j in range(4):
-                    shift = 0
-                    for q in range(j):
-                        if board[i][q] == 0:
-                            shift += 1
-                    if shift > 0:
-                        board[i][j - shift] = board[i][j]
-                        board[i][j] = 0
+                    if array_temp[x_ind][y_ind] == 0:
+                        for x_temp in range(x_ind + 1, 4):
+                            if array_temp[x_temp][y_ind]:
+                                array_temp[x_ind][y_ind] = array_temp[x_temp][y_ind]
+                                array_temp[x_temp][y_ind] = 0
+                                break
+
+                for x_ind in range(0, 3):
                     if (
-                        board[i][j - shift] == board[i][j - shift - 1]
-                        and not merged[i][j - shift - 1]
-                        and not merged[i][j - shift]
+                        array_temp[x_ind][y_ind] == array_temp[x_ind + 1][y_ind]
+                        and array_temp[x_ind][y_ind] != 0
                     ):
-                        board[i][j - shift - 1] *= 2
-                        board[i][j - shift] = 0
-                        merged[i][j - shift - 1] = True
+                        array_temp[x_ind][y_ind] *= 2
 
-        elif direc == "RIGHT":
-            for i in range(4):
-                for j in range(4):
-                    shift = 0
-                    for q in range(j):
-                        if board[i][3 - q] == 0:
-                            shift += 1
-                    if shift > 0:
-                        board[i][3 - j + shift] = board[i][3 - j]
-                        board[i][3 - j] = 0
-                    if 4 - j + shift <= 3:
-                        if (
-                            board[i][4 - j + shift] == board[i][3 - j + shift]
-                            and not merged[i][4 - j + shift]
-                            and not merged[i][3 - j + shift]   
-                        ):
-                            board[i][4 - j + shift] *= 2
-                            board[i][3 - j + shift] = 0
-                            merged[i][4 - j + shift] = True
+                        for x_temp in range(x_ind + 1, 3):
+                            array_temp[x_temp][y_ind] = array_temp[x_temp + 1][y_ind]
 
-        return board
+                        array_temp[3][y_ind] = 0
+
+        if direc == "DOWN":
+            for y_ind in range(0, 4):
+
+                for x_ind in range(3, -1, -1):
+
+                    if array_temp[x_ind][y_ind] == 0:
+                        for x_temp in range(x_ind - 1, -1, -1):
+                            if array_temp[x_temp][y_ind]:
+                                array_temp[x_ind][y_ind] = array_temp[x_temp][y_ind]
+                                array_temp[x_temp][y_ind] = 0
+                                break
+
+                for x_ind in range(3, 0, -1):
+                    if (
+                        array_temp[x_ind][y_ind] == array_temp[x_ind - 1][y_ind]
+                        and array_temp[x_ind][y_ind] != 0
+                    ):
+                        array_temp[x_ind][y_ind] *= 2
+
+                        for x_temp in range(x_ind - 1, 0, -1):
+                            array_temp[x_temp][y_ind] = array_temp[x_temp - 1][y_ind]
+
+                        array_temp[0][y_ind] = 0
+
+        if direc == "LEFT":
+            for x_ind in range(0, 4):
+
+                for y_ind in range(0, 4):
+
+                    if array_temp[x_ind][y_ind] == 0:
+                        for y_temp in range(y_ind + 1, 4):
+                            if array_temp[x_ind][y_temp]:
+                                array_temp[x_ind][y_ind] = array_temp[x_ind][y_temp]
+                                array_temp[x_ind][y_temp] = 0
+                                break
+
+                for y_ind in range(0, 3):
+                    if (
+                        array_temp[x_ind][y_ind] == array_temp[x_ind][y_ind + 1]
+                        and array_temp[x_ind][y_ind] != 0
+                    ):
+                        array_temp[x_ind][y_ind] *= 2
+
+                        for y_temp in range(y_ind + 1, 3):
+                            array_temp[x_ind][y_temp] = array_temp[x_ind][y_temp + 1]
+
+                        array_temp[x_ind][3] = 0
+
+        if direc == "RIGHT":
+            for x_ind in range(0, 4):
+
+                for y_ind in range(3, -1, -1):
+
+                    if array_temp[x_ind][y_ind] == 0:
+                        for y_temp in range(y_ind - 1, -1, -1):
+                            if array_temp[x_ind][y_temp]:
+                                array_temp[x_ind][y_ind] = array_temp[x_ind][y_temp]
+                                array_temp[x_ind][y_temp] = 0
+
+                                break
+
+                for y_ind in range(3, 0, -1):
+                    if (
+                        array_temp[x_ind][y_ind] == array_temp[x_ind][y_ind - 1]
+                        and array_temp[x_ind][y_ind] != 0
+                    ):
+                        array_temp[x_ind][y_ind] *= 2
+
+                        for y_temp in range(y_ind - 1, 0, -1):
+                            array_temp[x_ind][y_temp] = array_temp[x_ind][y_temp - 1]
+
+                        array_temp[x_ind][0] = 0
+
+        return array_temp
 
     def best_move_EMM(self, board, depth=4):
         """
@@ -116,10 +134,12 @@ class ExpectMMAI:
         best_next_move = ""
         results = []
         open_tiles = self.open_spots(board)
-        if len(open_tiles) < 4:
-            depth = 6
-        #elif len(open_tiles) < 6:
-        #    depth = 4
+        # if len(open_tiles) <= 12:
+        #    depth = 6
+        # elif len(open_tiles) <= 10:
+        #    depth = 8
+        # elif len(open_tiles) <= 6:
+        #    depth = 10
         print("Depth is:", depth)
         for direction in ["UP", "DOWN", "LEFT", "RIGHT"]:
             testing_board = deepcopy(board)
@@ -169,13 +189,13 @@ class ExpectMMAI:
 
         return
 
-    def expectiminimax(self, board, depth, direction, max_empty_tiles=6):
+    def expectiminimax(self, board, depth, direction, max_empty_tiles=4):
         """
         Expectiminimax function that also uses pruning,
         it checks at max the top 8 most valuable tiles.
         """
         if not self.game_logic.moves_possible(board):
-            #print("fails right here")
+            # print("fails right here")
             return -INFINITY, direction
 
         if depth < 0:

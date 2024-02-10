@@ -1,9 +1,12 @@
 """
 This is the main Gameloop where the game runs
 """
+
 import copy
-import random
 import os
+import random
+from copy import deepcopy
+
 import pygame
 from game_logic import Logic
 from graphics import RenderGame
@@ -23,7 +26,6 @@ class GameLoop:
     def __init__(self):
         self.board_values = [[0 for _ in range(4)] for _ in range(4)]
         self.spawn_new = True
-        self.game_over = False
         self.start_count = 0
         self.direction = ""
         self.score = 0
@@ -47,7 +49,7 @@ class GameLoop:
         self.game_graphics = RenderGame()
 
     def play(self):
-        """main loop"""
+        """Main game loop"""
         run = True
         old_board = None
 
@@ -56,56 +58,41 @@ class GameLoop:
             screen.fill("gray")
             self.game_graphics.draw_board(screen, self.score, self.high_score)
             self.game_graphics.draw_pieces(self.board_values, screen)
+
+            # Check if a direction key was pressed
             if self.direction != "":
-                old_board = copy.deepcopy(self.board_values)
-                self.board_values, self.score = self.game_logic.take_turn(
-                    self.direction, self.board_values, self.score
-                )
-
-                self.direction = ""
-                if self.start_count < 2:
-                    self.spawn_new = True
-                else:
-                    self.spawn_new = self.board_values != old_board
-
-            if self.spawn_new or self.start_count < 2:
-                self.board_values, self.game_over = self.game_logic.new_pieces(
+                old_board = deepcopy(
                     self.board_values
-                )
-                for row in self.board_values:
-                    print(row)
+                )  # Make a deep copy of the current board
+                self.board_values, self.score, _ = self.game_logic.take_turn(
+                    self.direction, self.board_values, self.score
+                )  # Execute the move
+                self.direction = ""
 
-                print("Checking in main loop:", self.game_over)
-                self.spawn_new = False
-                self.start_count += 1
-
-            if self.game_over:
-                self.game_graphics.draw_over(screen)
-                if self.high_score > self.init_high:
-                    scores_file_path = os.path.join(
-                        os.path.dirname(os.path.abspath(
-                            __file__)), "scores.txt"
+                # Check if the board has changed after the move
+                if self.board_values != old_board:
+                    self.spawn_new = (
+                        True  # Set spawn_new to True if the board has changed
                     )
-                    with open(scores_file_path, "w") as file:
-                        file.write(f"{self.high_score}")
-                    file.close()
+
+            # Spawn new tile if necessary
+            if self.spawn_new:
+                self.board_values = self.game_logic.new_pieces(self.board_values)
+                self.spawn_new = False
+
+            # Check if the game is over
+            if not self.game_logic.moves_possible(self.board_values):
+                self.game_graphics.draw_over(screen)
+                if self.score > self.high_score:
+                    self.high_score = self.score
+                if self.high_score > self.init_high:
                     self.init_high = self.high_score
-
-            for event in pygame.event.get():
-                if event.type == pygame.QUIT:
-                    run = False
-                if event.type == pygame.KEYUP:
-                    if event.key in (pygame.K_UP, pygame.K_w):
-                        self.direction = "UP"
-                    elif event.key in (pygame.K_DOWN, pygame.K_s):
-                        self.direction = "DOWN"
-                    elif event.key in (pygame.K_LEFT, pygame.K_a):
-                        self.direction = "LEFT"
-                    elif event.key in (pygame.K_RIGHT, pygame.K_d):
-                        self.direction = "RIGHT"
-
-                    if self.game_over:
+                for event in pygame.event.get():
+                    if event.type == pygame.QUIT:
+                        run = False
+                    if event.type == pygame.KEYUP:
                         if event.key == pygame.K_RETURN:
+                            # Reset the game
                             self.board_values = [
                                 [0 for _ in range(4)] for _ in range(4)
                             ]
@@ -114,9 +101,20 @@ class GameLoop:
                             self.score = 0
                             self.direction = ""
                             self.game_over = False
-
-            if self.score > self.high_score:
-                self.high_score = self.score
+            else:
+                # Handle other events
+                for event in pygame.event.get():
+                    if event.type == pygame.QUIT:
+                        run = False
+                    if event.type == pygame.KEYUP:
+                        if event.key in (pygame.K_UP, pygame.K_w):
+                            self.direction = "UP"
+                        elif event.key in (pygame.K_DOWN, pygame.K_s):
+                            self.direction = "DOWN"
+                        elif event.key in (pygame.K_LEFT, pygame.K_a):
+                            self.direction = "LEFT"
+                        elif event.key in (pygame.K_RIGHT, pygame.K_d):
+                            self.direction = "RIGHT"
 
             pygame.display.flip()
 

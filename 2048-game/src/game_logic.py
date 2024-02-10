@@ -4,6 +4,7 @@ as merging the tiles in the game and keeping score.
 """
 
 from random import randint
+from copy import deepcopy
 
 
 class Logic:
@@ -13,164 +14,140 @@ class Logic:
         pass
 
     def take_turn(self, direc, board, score):
-        """
-        This function handles Up, Down, Left,
-        Right moves on the board and updates the score.
-        """
+        array_temp = [[0 for x in range(0,4)] for x in range(0,4)]
+        for x in range(0,16):
+            array_temp[x%4][x//4] = board[x%4][x//4]
         hadMovement = False
-        merged = [[False for _ in range(4)] for _ in range(4)]
-        if direc == "UP":
-            for i in range(4):
-                for j in range(4):
-                    shift = 0
-                    if i > 0:
-                        for q in range(i):
-                            if board[q][j] == 0:
-                                shift += 1
-                        if shift > 0:
-                            board[i - shift][j] = board[i][j]
-                            board[i][j] = 0
+
+        
+        if(direc == 'UP'):
+            for y_ind in range(0,4):
+
+                for x_ind in range(0,4):
+
+                    if(array_temp[x_ind][y_ind] == 0):
+                        for x_temp in range(x_ind+1,4):
+                            if(array_temp[x_temp][y_ind]):
+                                array_temp[x_ind][y_ind] = array_temp[x_temp][y_ind]
+                                array_temp[x_temp][y_ind] = 0
+                                hadMovement = True
+                                break                    
+
+                for x_ind in range(0,3):
+                    if(array_temp[x_ind][y_ind] == array_temp[x_ind+1][y_ind] and array_temp[x_ind][y_ind] != 0): 
+                        array_temp[x_ind][y_ind] *= 2
+                        score += array_temp[x_ind][y_ind]
+
+                        for x_temp in range(x_ind+1,3):
+                            array_temp[x_temp][y_ind] = array_temp[x_temp+1][y_ind]
                             hadMovement = True
 
-                        if (
-                            board[i - shift - 1][j] == board[i - shift][j]
-                            and not merged[i - shift][j]
-                            and not merged[i - shift - 1][j]
-                        ):
-                            # If the piece above has the same value as the moved piece, they
-                            # merge and the piece gets double its value
-                            board[i - shift - 1][j] *= 2
-                            score += board[i - shift - 1][j]
-                            board[i - shift][j] = 0
-                            merged[i - shift - 1][j] = True
+
+                        array_temp[3][y_ind] = 0
+
+        if(direc == 'DOWN'):
+            for y_ind in range(0,4):
+
+                for x_ind in range(3,-1,-1):
+
+                    if(array_temp[x_ind][y_ind] == 0):
+                        for x_temp in range(x_ind-1,-1,-1):
+                            if(array_temp[x_temp][y_ind]):
+                                array_temp[x_ind][y_ind] = array_temp[x_temp][y_ind]
+                                array_temp[x_temp][y_ind] = 0
+                                hadMovement = True
+                                break                    
+
+                for x_ind in range(3,0,-1):
+                    if(array_temp[x_ind][y_ind] == array_temp[x_ind-1][y_ind] and array_temp[x_ind][y_ind] != 0): 
+                        array_temp[x_ind][y_ind] *= 2
+                        score += array_temp[x_ind][y_ind]
+
+                        for x_temp in range(x_ind-1,0,-1):
+                            array_temp[x_temp][y_ind] = array_temp[x_temp-1][y_ind]
                             hadMovement = True
 
-        elif direc == "DOWN":
-            for i in range(3):
-                for j in range(4):
-                    shift = 0
-                    for q in range(i + 1):
-                        if board[3 - q][j] == 0:
-                            shift += 1
-                    if shift > 0:
-                        board[2 - i + shift][j] = board[2 - i][j]
-                        board[2 - i][j] = 0
+                        array_temp[0][y_ind] = 0
+
+        if(direc == 'LEFT'):
+            for x_ind in range(0,4):
+
+                for y_ind in range(0,4):
+
+                    if(array_temp[x_ind][y_ind] == 0):
+                        for y_temp in range(y_ind+1,4):
+                            if(array_temp[x_ind][y_temp]):
+                                array_temp[x_ind][y_ind] = array_temp[x_ind][y_temp]
+                                array_temp[x_ind][y_temp] = 0
+                                hadMovement = True
+                                break                    
+
+                for y_ind in range(0,3):
+                    if(array_temp[x_ind][y_ind] == array_temp[x_ind][y_ind+1] and array_temp[x_ind][y_ind] != 0): 
+                        array_temp[x_ind][y_ind] *= 2
+                        score += array_temp[x_ind][y_ind]
                         hadMovement = True
 
-                    if 3 - i + shift <= 3:
-                        if (
-                            board[2 - i + shift][j] == board[3 - i + shift][j]
-                            and not merged[3 - i + shift][j]
-                            and not merged[2 - i + shift][j]
-                        ):
-                            board[3 - i + shift][j] *= 2
-                            score += board[3 - i + shift][j]
-                            board[2 - i + shift][j] = 0
-                            merged[3 - i + shift][j] = True
+                        for y_temp in range(y_ind+1,3):
+                            array_temp[x_ind][y_temp] = array_temp[x_ind][y_temp+1]
                             hadMovement = True
 
-        elif direc == "LEFT":
-            for i in range(4):
-                for j in range(4):
-                    shift = 0
-                    for q in range(j):
-                        if board[i][q] == 0:
-                            shift += 1
-                    if shift > 0:
-                        board[i][j - shift] = board[i][j]
-                        board[i][j] = 0
-                        hadMovement = True
 
-                    if (
-                        board[i][j - shift] == board[i][j - shift - 1]
-                        and not merged[i][j - shift - 1]
-                        and not merged[i][j - shift]
-                    ):
-                        board[i][j - shift - 1] *= 2
-                        score += board[i][j - shift - 1]
-                        board[i][j - shift] = 0
-                        merged[i][j - shift - 1] = True
-                        hadMovement = True
+                        array_temp[x_ind][3] = 0
 
-        elif direc == "RIGHT":
-            for i in range(4):
-                for j in range(4):
-                    shift = 0
-                    for q in range(j):
-                        if board[i][3 - q] == 0:
-                            shift += 1
-                    if shift > 0:
-                        board[i][3 - j + shift] = board[i][3 - j]
-                        board[i][3 - j] = 0
-                        hadMovement = True
+        if(direc == 'RIGHT'):
+            for x_ind in range(0,4):
 
-                    if 4 - j + shift <= 3:
-                        if (
-                            board[i][4 - j + shift] == board[i][3 - j + shift]
-                            and not merged[i][4 - j + shift]
-                            and not merged[i][3 - j + shift]
-                        ):
-                            board[i][4 - j + shift] *= 2
-                            score += board[i][4 - j + shift]
-                            board[i][3 - j + shift] = 0
-                            merged[i][4 - j + shift] = True
+                for y_ind in range(3,-1,-1):
+
+                    if(array_temp[x_ind][y_ind] == 0):
+                        for y_temp in range(y_ind-1,-1,-1):
+                            if(array_temp[x_ind][y_temp]):
+                                array_temp[x_ind][y_ind] = array_temp[x_ind][y_temp]
+                                array_temp[x_ind][y_temp] = 0
+                                hadMovement = True
+
+                                break                    
+
+                for y_ind in range(3,0,-1):
+                    if(array_temp[x_ind][y_ind] == array_temp[x_ind][y_ind-1] and array_temp[x_ind][y_ind] != 0): 
+                        array_temp[x_ind][y_ind] *= 2
+                        score += array_temp[x_ind][y_ind]
+
+                        for y_temp in range(y_ind-1,0,-1):
+                            array_temp[x_ind][y_temp] = array_temp[x_ind][y_temp-1]
                             hadMovement = True
 
-        return board, score, hadMovement
+
+                        array_temp[x_ind][0] = 0
+
+        
+        return (array_temp, score, hadMovement)    
 
     def moves_possible(self, board):
         """
-        In 2048, the game is over when there are no moves possible, not
-        necessarily when the board is full. This function checks if there is
-        any moves left possible for the player.
+        Check if there are any possible moves left on the board.
+        Returns True if there are moves left, False otherwise.
         """
-        moves_possible = 0
-        # moves up
+        # Check if any adjacent tiles have the same value
         for i in range(4):
             for j in range(4):
-                shift = 0
-                if i > 0:
-                    for q in range(i):
-                        if board[q][j] == 0:
-                            shift += 1
-                    if board[i - shift - 1][j] == board[i - shift][j]:
-                        moves_possible += 1
+                if i > 0 and board[i][j] == board[i - 1][j]:
+                    return True
+                if i < 3 and board[i][j] == board[i + 1][j]:
+                    return True
+                if j > 0 and board[i][j] == board[i][j - 1]:
+                    return True
+                if j < 3 and board[i][j] == board[i][j + 1]:
+                    return True
 
-        # moves down
-        for i in range(3):
-            for j in range(4):
-                shift = 0
-                for q in range(i + 1):
-                    if board[3 - q][j] == 0:
-                        shift += 1
-                if 3 - i + shift <= 3:
-                    if board[2 - i + shift][j] == board[3 - i + shift][j]:
-                        moves_possible += 1
+        # Check if there are any empty tiles
+        for row in board:
+            if 0 in row:
+                return True
 
-        # moves left
-        for i in range(4):
-            for j in range(4):
-                shift = 0
-                for q in range(j):
-                    if board[i][q] == 0:
-                        shift += 1
-                if board[i][j - shift] == board[i][j - shift - 1]:
-                    moves_possible += 1
-        # moves right
-        for i in range(4):
-            for j in range(4):
-                shift = 0
-                for q in range(j):
-                    if board[i][3 - q] == 0:
-                        shift += 1
-                if 4 - j + shift <= 3:
-                    if board[i][4 - j + shift] == board[i][3 - j + shift]:
-                        moves_possible += 1
-
-        if moves_possible == 0:
-            return False
-        else:
-            return True
+        # No possible moves left
+        return False
 
     def new_pieces(self, board):
         """
@@ -197,10 +174,5 @@ class Logic:
                 if board[i][j] == 0:
                     empty_spots.append((i, j))
 
-        for row in board:
-            print(row)
-        print()
-
-        full_board = self.moves_possible(board)
-
-        return board, full_board
+        return board
+        

@@ -12,11 +12,12 @@
 
 [Week 3](./weeklyReports/week_3_report.md)
 
+[Week 4](./weeklyReports/week_4_report.md)
 
 ### Usage Instructions
 
-* Clone the repository
-* navigate to `./2048-game`
-* If you want to play the game by yourself run `poetry run invoke start`
-* If you want the AI to solve it for you `poetry run invoke startAi`
-* To run tests navigate to `./2048-game/src` and run `poetry run invoke test`
+- Clone the repository
+- navigate to `./2048-game`
+- If you want to play the game by yourself run `poetry run invoke start`
+- If you want the AI to solve it for you `poetry run invoke startAi`
+- To run tests navigate to `./2048-game/src` and run `poetry run invoke test`

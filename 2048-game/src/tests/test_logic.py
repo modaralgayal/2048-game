@@ -45,14 +45,13 @@ class TestLogic(unittest.TestCase):
         self.assertTrue(new_score >= 4)
 
     def test_new_pieces(self):
-        new_board, moves_possible = self.logic.new_pieces(
+        new_board = self.logic.new_pieces(
             [[2, 4, 2, 0], [4, 0, 2, 0], [2, 2, 0, 0], [0, 0, 4, 0]]
         )
 
         assert(
             new_board != [[2, 4, 2, 0], [4, 0, 2, 0], [2, 2, 0, 0], [0, 0, 4, 0]]
         )
-        self.assertTrue(moves_possible)
 
 
 if __name__ == "__main__":
