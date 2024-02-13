@@ -70,7 +70,7 @@ class AiGameLoop:
             self.game_graphics.draw_pieces(self.board_values, screen)
 
             if self.make_moves:
-                self.direction = self.ai_player.best_move_EMM(self.board_values)[0]
+                self.direction = self.ai_player.best_move_EMM(self.board_values, self.score)[0]
 
             if self.direction != "":
                 self.board_values, self.score, hadMovement = self.game_logic.take_turn(

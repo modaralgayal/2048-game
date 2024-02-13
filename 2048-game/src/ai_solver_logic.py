@@ -19,6 +19,7 @@ class ExpectMMAI:
         self.game_logic = Logic()
         self.heuristic = Heuristic()
         self.score = 0
+        self.max_tiles = 16
 
     def take_turn(self, direc, board):
         """Makes move on the board"""
@@ -125,41 +126,22 @@ class ExpectMMAI:
 
         return array_temp
 
-    def best_move_EMM(self, board, depth=4):
+    def best_move_EMM(self, board, current_score, depth=2):
         """
         This function calls the expectiminimax algorithm and gathers possible moves,
         then chooses the best move based based on the heuristis score.
         """
+        if current_score >= 4000:
+            depth = 4
+        elif current_score >= 22000:
+            depth = 6
+
         best_score = -INFINITY
         best_next_move = ""
-        results = []
-        open_tiles = self.open_spots(board)
-        if len(open_tiles) <= 4:
-            depth = 6
-        # elif len(open_tiles) <= 10:
-        #    depth = 8
-        # elif len(open_tiles) <= 6:
-        #    depth = 10
+
         print("Depth is:", depth)
-        for direction in ["UP", "DOWN", "LEFT", "RIGHT"]:
-            testing_board = deepcopy(board)
-            old_board = deepcopy(board)
-            testing_board = self.take_turn(direction, testing_board)
-            if testing_board != old_board:
-                res = self.expectiminimax(testing_board, depth, direction)
-                results.append(res)
-
-        results = [res for res in results]
-
-        for res in results:
-            if res[0] >= best_score:
-                best_score = res[0]
-                best_next_move = res[1]
-
-        self.score = best_score
-
-        # print(best_next_move)
-        # print(results)
+        testing_board = deepcopy(board)
+        best_score, best_next_move = self.expectiminimax(testing_board, depth)
 
         return best_next_move, best_score
 
@@ -189,20 +171,19 @@ class ExpectMMAI:
 
         return
 
-    def expectiminimax(self, board, depth, direction, max_empty_tiles=4):
+    def expectiminimax(self, board, depth, direction=None):
         """
         Expectiminimax function that also uses pruning,
         it checks at max the top 8 most valuable tiles.
         """
+
         if not self.game_logic.moves_possible(board):
-            # print("fails right here")
             return -INFINITY, direction
 
         if depth < 0:
             return self.heuristic.heuristicValue(board), direction
-
         a = 0
-        if depth % 2 != 0:
+        if depth % 2 == 0:
             a = -INFINITY
             for next_direction in ["UP", "DOWN", "LEFT", "RIGHT"]:
                 testing_board = deepcopy(board)
@@ -212,11 +193,12 @@ class ExpectMMAI:
 
                 if testing_board != old_board:
                     response = self.expectiminimax(
-                        testing_board, depth - 1, next_direction, max_empty_tiles
-                    )[0]
-                    if response > a:
-                        a = response
-        elif depth % 2 == 0:
+                        testing_board, depth - 1, next_direction
+                    )
+                    if response[0] > a:
+                        a = response[0]
+                        direction = response[1]
+        elif depth % 2 != 0:
             a = 0
             open_tiles = self.open_spots(board)
 
@@ -225,16 +207,13 @@ class ExpectMMAI:
                 key=lambda loc: self.heuristic.tile_weight(loc),
                 reverse=True,
             )
-            open_tiles = open_tiles[:max_empty_tiles]
+            open_tiles = open_tiles[: self.max_tiles]
 
             for prob, value in [(0.9, 2), (0.1, 4)]:
                 for location in open_tiles:
                     self.add_tile(board, location, value)
                     response = (
-                        prob
-                        * self.expectiminimax(
-                            board, depth - 1, direction, max_empty_tiles
-                        )[0]
+                        prob * self.expectiminimax(board, depth - 1, direction)[0]
                     )
                     a += response
                     self.add_tile(board, location)
