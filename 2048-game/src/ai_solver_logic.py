@@ -19,7 +19,7 @@ class ExpectMMAI:
         self.game_logic = Logic()
         self.heuristic = Heuristic()
         self.score = 0
-        self.max_tiles = 16
+        self.max_tiles = 2
 
     def take_turn(self, direc, board):
         """Makes move on the board"""
@@ -126,22 +126,22 @@ class ExpectMMAI:
 
         return array_temp
 
-    def best_move_EMM(self, board, current_score, depth=2):
+    def best_move_EMM(self, board, current_score, depth=6):
         """
         This function calls the expectiminimax algorithm and gathers possible moves,
         then chooses the best move based based on the heuristis score.
         """
-        if current_score >= 4000:
-            depth = 4
-        elif current_score >= 22000:
-            depth = 6
+        open_tiles = self.open_spots(board)
+
 
         best_score = -INFINITY
         best_next_move = ""
 
+
         print("Depth is:", depth)
         testing_board = deepcopy(board)
         best_score, best_next_move = self.expectiminimax(testing_board, depth)
+
 
         return best_next_move, best_score
 
@@ -171,7 +171,7 @@ class ExpectMMAI:
 
         return
 
-    def expectiminimax(self, board, depth, direction=None):
+    def expectiminimax(self, board, depth, direction = None):
         """
         Expectiminimax function that also uses pruning,
         it checks at max the top 8 most valuable tiles.
