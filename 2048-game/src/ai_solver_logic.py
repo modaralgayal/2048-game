@@ -19,7 +19,7 @@ class ExpectMMAI:
         self.game_logic = Logic()
         self.heuristic = Heuristic()
         self.score = 0
-        self.max_tiles = 2
+        self.max_tiles = 3
 
     def take_turn(self, direc, board):
         """Makes move on the board"""
@@ -131,17 +131,11 @@ class ExpectMMAI:
         This function calls the expectiminimax algorithm and gathers possible moves,
         then chooses the best move based based on the heuristis score.
         """
-        open_tiles = self.open_spots(board)
-
-
         best_score = -INFINITY
         best_next_move = ""
-
-
         print("Depth is:", depth)
         testing_board = deepcopy(board)
         best_score, best_next_move = self.expectiminimax(testing_board, depth)
-
 
         return best_next_move, best_score
 
@@ -217,5 +211,4 @@ class ExpectMMAI:
                     )
                     a += response
                     self.add_tile(board, location)
-
         return a, direction
