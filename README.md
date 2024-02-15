@@ -14,6 +14,8 @@
 
 [Week 4](./weeklyReports/week_4_report.md)
 
+[Week 5](./weeklyReports/week_5_report.md)
+
 ### Usage Instructions
 
 - Clone the repository
