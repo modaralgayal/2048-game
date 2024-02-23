@@ -18,7 +18,7 @@
 
 [Week 5](./weeklyReports/week_5_report.md)
 
-
+[Week 6](./weeklyReports/week_6_report.md)
 
 ### Usage Instructions
 
