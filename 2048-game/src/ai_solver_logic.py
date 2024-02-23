@@ -7,6 +7,7 @@ INFINITY = float("inf")
 import multiprocessing as mp
 from copy import deepcopy
 from random import randint
+#import numpy as np
 
 from game_logic import Logic
 from heuristic import Heuristic

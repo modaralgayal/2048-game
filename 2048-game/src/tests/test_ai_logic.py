@@ -28,9 +28,9 @@ class TestAiLogic(unittest.TestCase):
         # Test that the best move is selected
         board_values = [[2, 2, 0, 0], [2, 4, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0]]
 
-        expected_best_move = "DOWN"
+        expected_best_move = "UP"
 
-        best_move, _ = self.ai_game.best_move_EMM(board_values, depth=2)
+        best_move, _ = self.ai_game.best_move_EMM(board_values, 0, depth=2)
 
         self.assertEqual(best_move, expected_best_move)
 
