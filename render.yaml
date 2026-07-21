@@ -7,7 +7,7 @@ services:
   - type: web
     name: 2048-game
     runtime: image
-    repo: https://github.com/YOUR_USERNAME/2048-game   # ← Replace with your repo URL
+    repo: https://github.com/modaralgayal/2048-game   # ← Replace with your repo URL
     dockerfilePath: ./Dockerfile
     dockerContext: .
     plan: free
