@@ -103,7 +103,7 @@ def get_state():
 @app.route("/api/move", methods=["POST"])
 def make_move():
     """Process a player move (direction)."""
-    global BOARD, SCORE, GAME_OVER, SPAWN_NEW, START_COUNT
+    global BOARD, SCORE, GAME_OVER, SPAWN_NEW, START_COUNT, HIGH_SCORE
 
     data = request.get_json()
     direction = data.get("direction", "").upper()
@@ -127,7 +127,6 @@ def make_move():
         GAME_OVER = True
 
     if SCORE > HIGH_SCORE:
-        global HIGH_SCORE
         HIGH_SCORE = SCORE
         _save_high_score()
 
@@ -142,7 +141,7 @@ def make_move():
 @app.route("/api/ai-move", methods=["POST"])
 def ai_move():
     """Ask the AI solver for the best move and apply it."""
-    global BOARD, SCORE, GAME_OVER, SPAWN_NEW, START_COUNT
+    global BOARD, SCORE, GAME_OVER, SPAWN_NEW, START_COUNT, HIGH_SCORE
 
     data = request.get_json()
     depth = data.get("depth", 2)
