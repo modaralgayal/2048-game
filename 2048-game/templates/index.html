@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>2048 Game – AI Solver</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>2048</h1>
+      <div class="scores">
+        <div class="score-box">
+          <span class="score-label">Score</span>
+          <span id="score" class="score-value">0</span>
+        </div>
+        <div class="score-box">
+          <span class="score-label">Best</span>
+          <span id="high-score" class="score-value">0</span>
+        </div>
+      </div>
+    </header>
+
+    <div class="board-container">
+      <div id="game-over-overlay" class="game-over-overlay hidden">
+        <div class="game-over-content">
+          <h2>Game Over!</h2>
+          <p>Final score: <span id="final-score">0</span></p>
+          <button id="restart-btn" class="btn">Play Again</button>
+        </div>
+      </div>
+      <div id="board" class="board">
+      </div>
+    </div>
+
+    <div class="controls">
+      <p class="hint">Use arrow keys or swipe to play manually</p>
+      <div class="button-group">
+        <button id="ai-move-btn" class="btn btn-ai">🤖 AI Move</button>
+        <button id="ai-autoplay-btn" class="btn btn-ai">▶ AI Autoplay</button>
+        <button id="reset-btn" class="btn btn-reset">↻ New Game</button>
+      </div>
+      <div class="depth-control">
+        <label for="depth-slider">AI Search Depth: <span id="depth-value">2</span></label>
+        <input type="range" id="depth-slider" min="1" max="4" value="2" step="1">
+      </div>
+      <div id="ai-status" class="ai-status"></div>
+    </div>
+  </div>
+
+  <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>

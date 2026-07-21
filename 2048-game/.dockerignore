@@ -1,0 +1,14 @@
+__pycache__/
+*.pyc
+*.pyo
+.git/
+.gitignore
+README.md
+poetry.lock
+pyproject.toml
+setup.py
+setupfile.egg-info/
+.coveragerc
+.coverage
+.coverage.*
+tasks.py

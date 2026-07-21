@@ -1,0 +1,209 @@
+/* ── Reset & base ─────────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+  background: #faf8ef;
+  color: #776e65;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.container {
+  max-width: 500px;
+  width: 100%;
+  padding: 20px;
+}
+
+/* ── Header & scores ──────────────────────────────────────────── */
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+h1 {
+  font-size: 3rem;
+  font-weight: 800;
+  color: #776e65;
+  line-height: 1;
+}
+
+.scores {
+  display: flex;
+  gap: 8px;
+}
+
+.score-box {
+  background: #bbada0;
+  color: #fff;
+  border-radius: 6px;
+  padding: 6px 18px;
+  text-align: center;
+  min-width: 80px;
+}
+
+.score-label {
+  display: block;
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  opacity: 0.8;
+}
+
+.score-value {
+  display: block;
+  font-size: 1.3rem;
+  font-weight: 700;
+}
+
+/* ── Board ────────────────────────────────────────────────────── */
+.board-container {
+  position: relative;
+  background: #bbada0;
+  border-radius: 8px;
+  padding: 10px;
+  aspect-ratio: 1 / 1;
+  width: 100%;
+  margin-bottom: 16px;
+}
+
+.board {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+  width: 100%;
+  height: 100%;
+}
+
+.tile {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 6px;
+  font-weight: 700;
+  font-size: 1.4rem;
+  transition: background 0.15s, transform 0.1s;
+  user-select: none;
+}
+
+/* Tile colours */
+.tile-0    { background: #cdc1b4; }
+.tile-2    { background: #eee4da; color: #776e65; }
+.tile-4    { background: #ede0c8; color: #776e65; }
+.tile-8    { background: #f2b179; color: #f9f6f2; }
+.tile-16   { background: #f59563; color: #f9f6f2; }
+.tile-32   { background: #f67c5f; color: #f9f6f2; }
+.tile-64   { background: #f65e3b; color: #f9f6f2; }
+.tile-128  { background: #edcf72; color: #f9f6f2; font-size: 1.1rem; }
+.tile-256  { background: #edcc61; color: #f9f6f2; font-size: 1.1rem; }
+.tile-512  { background: #edc850; color: #f9f6f2; font-size: 1.1rem; }
+.tile-1024 { background: #edc53f; color: #f9f6f2; font-size: 0.9rem; }
+.tile-2048 { background: #edc22e; color: #f9f6f2; font-size: 0.9rem; }
+.tile-super{ background: #3c3a32; color: #f9f6f2; font-size: 0.8rem; }
+
+/* ── Game-over overlay ────────────────────────────────────────── */
+.game-over-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(238, 228, 218, 0.73);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 8px;
+  z-index: 10;
+}
+
+.game-over-overlay.hidden { display: none; }
+
+.game-over-content {
+  text-align: center;
+}
+
+.game-over-content h2 {
+  font-size: 2.5rem;
+  margin-bottom: 8px;
+}
+
+.game-over-content p {
+  font-size: 1.1rem;
+  margin-bottom: 16px;
+}
+
+/* ── Buttons ──────────────────────────────────────────────────── */
+.controls {
+  text-align: center;
+}
+
+.hint {
+  font-size: 0.85rem;
+  color: #776e65;
+  margin-bottom: 12px;
+  opacity: 0.7;
+}
+
+.button-group {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-bottom: 12px;
+}
+
+.btn {
+  border: none;
+  border-radius: 6px;
+  padding: 10px 20px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s, transform 0.1s;
+}
+
+.btn:active { transform: scale(0.97); }
+
+.btn-ai {
+  background: #8f7a66;
+  color: #f9f6f2;
+}
+
+.btn-ai:hover { background: #7a6658; }
+
+.btn-ai.running { background: #e74c3c; }
+
+.btn-reset {
+  background: #bbada0;
+  color: #f9f6f2;
+}
+
+.btn-reset:hover { background: #a09386; }
+
+/* ── Depth slider ─────────────────────────────────────────────── */
+.depth-control {
+  font-size: 0.85rem;
+  color: #776e65;
+  margin-bottom: 10px;
+}
+
+.depth-control input[type="range"] {
+  width: 140px;
+  vertical-align: middle;
+  accent-color: #8f7a66;
+}
+
+/* ── AI status ────────────────────────────────────────────────── */
+.ai-status {
+  font-size: 0.8rem;
+  color: #8f7a66;
+  min-height: 1.2em;
+}
+
+/* ── Responsive ───────────────────────────────────────────────── */
+@media (max-width: 520px) {
+  h1 { font-size: 2.2rem; }
+  .tile { font-size: 1.1rem; }
+  .container { padding: 12px; }
+}

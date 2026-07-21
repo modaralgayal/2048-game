@@ -7,10 +7,11 @@ INFINITY = float("inf")
 import multiprocessing as mp
 from copy import deepcopy
 from random import randint
-#import numpy as np
 
 from game_logic import Logic
 from heuristic import Heuristic
+
+# import numpy as np
 
 
 class ExpectMMAI:
@@ -127,7 +128,7 @@ class ExpectMMAI:
 
         return array_temp
 
-    def best_move_EMM(self, board, current_score, depth=6):
+    def best_move_EMM(self, board, current_score, depth=2):
         """
         This function calls the expectiminimax algorithm and gathers possible moves,
         then chooses the best move based based on the heuristis score.
@@ -166,7 +167,7 @@ class ExpectMMAI:
 
         return
 
-    def expectiminimax(self, board, depth, direction = None):
+    def expectiminimax(self, board, depth, direction=None):
         """
         Expectiminimax function that also uses pruning,
         it checks at max the top 8 most valuable tiles.
