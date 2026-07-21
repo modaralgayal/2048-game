@@ -14,7 +14,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     && rm -rf /var/lib/apt/lists/*
 
 # Copy dependency files and install
-COPY requirements.txt .
+COPY 2048-game/requirements.txt .
 RUN pip install --no-cache-dir --user -r requirements.txt
 
 # ---- Runtime stage ----
@@ -28,11 +28,11 @@ COPY --from=builder /root/.local /root/.local
 # Make sure scripts in .local are usable
 ENV PATH=/root/.local/bin:$PATH
 
-# Copy the application source code
-COPY src/ src/
-COPY web_app.py .
-COPY templates/ templates/
-COPY static/ static/
+# Copy the application source code (located inside the 2048-game/ subdirectory)
+COPY 2048-game/src/ src/
+COPY 2048-game/web_app.py .
+COPY 2048-game/templates/ templates/
+COPY 2048-game/static/ static/
 
 # Ensure the high-score file exists
 RUN echo "0" > src/scores.txt
